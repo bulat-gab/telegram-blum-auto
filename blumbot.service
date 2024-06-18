@@ -6,7 +6,7 @@ After=network.target
 User=ubuntu
 WorkingDirectory=/home/ubuntu/telegram-blum-auto
 Environment=PATH=/home/ubuntu/telegram-blum-auto/venv/bin/
-ExecStart=/home/ubuntu/telegram-blum-auto/venv/bin/python3/home/ubuntu/> telegram-blum-auto/main.py -a 1
+ExecStart=/home/ubuntu/telegram-blum-auto/venv/bin/python3 /home/ubuntu/telegram-blum-auto/main.py -a 1
 
 Restart=always
 
