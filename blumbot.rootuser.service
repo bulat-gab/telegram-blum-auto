@@ -1,0 +1,14 @@
+[Unit]
+Description=BlumBotService
+After=network.target
+
+[Service]
+User=ubuntu
+WorkingDirectory=/root/telegram-blum-auto
+Environment=PATH=/root/telegram-blum-auto/venv/bin/
+ExecStart=/root/telegram-blum-auto/venv/bin/python3 /root/telegram-blum-auto/main.py -a 1
+
+Restart=always
+
+[Install]
+WantedBy=multi-user.target
