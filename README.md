@@ -1,6 +1,6 @@
 [![Join our Telegram](https://img.shields.io/badge/Telegram-2CA5E0?style=for-the-badge&logo=telegram&logoColor=white)](https://t.me/hidden_coding)
 
-![Showcase](https://github.com/D4rkKaizen/telegram-blum-auto/assets/HiddenCode.png)
+![Showcase](assets/HiddenCode.png)
 
 
 ## Recommendation before usage
