@@ -1,14 +1,11 @@
 [![Join our Telegram](https://img.shields.io/badge/Telegram-2CA5E0?style=for-the-badge&logo=telegram&logoColor=white)](https://t.me/hidden_coding)
 
-![image psd(9)](https://github.com/flaming-chameleon/telegram-blum-auto/assets/73156836/187c6764-d6af-4f60-a7e2-f3bc656225c9)
+![image psd(9)](https://github.com/flaming-chameleon/telegram-blum-auto/assets/HiddenCode.png)
 
 
 ## Recommendation before usage
 
 # 🔥🔥 use PYTHON 3.10 🔥🔥
-
-
-![image psd(12)](https://github.com/flaming-chameleon/telegram-blum-auto/assets/73156836/b1b9190e-7860-405a-aa2d-84728967e733)
 
 
 ### English
@@ -28,7 +25,7 @@ BlumBot is a Telegram automation tool designed to help you manage and interact w
 
 1. **Clone the repository:**
     ```bash
-    git clone https://github.com/flaming-chameleon/telegram-blum-auto.git
+    git clone https://github.com/D4rkKaizen/telegram-blum-auto.git
     cd telegram-blum-auto
     ```
 
@@ -99,7 +96,7 @@ BlumBot - это инструмент автоматизации для Telegram
 
 1. **Клонируйте репозиторий:**
     ```bash
-    git clone https://github.com/flaming-chameleon/telegram-blum-auto.git
+    git clone https://github.com/D4rkKaizen/telegram-blum-auto.git
     cd telegram-blum-auto
     ```
 
