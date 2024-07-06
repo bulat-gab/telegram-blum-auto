@@ -40,7 +40,7 @@ Edit the `data/config.py` file with your `API_ID` and `API_HASH`.
 API_ID = 'your_api_id'
 API_HASH = 'your_api_hash'
 ```
-get ID and API_HASH here -> my.telegram.org
+get ID and API_HASH here -> [my.telegram.org](https://my.telegram.org/apps)
 
 ### Usage
 
@@ -112,7 +112,7 @@ BlumBot - это инструмент автоматизации для Telegram
 API_ID = 'your_api_id'
 API_HASH = 'your_api_hash'
 ```
-получить ID и API_HASH тут -> my.telegram.org
+получить ID и API_HASH тут -> [my.telegram.org](https://my.telegram.org/apps)
 
 ### Использование
 
