@@ -12,13 +12,13 @@ class BlumBot:
         """
         Initialize the BlumBot with thread id, account name, and optional proxy.
         """
-        self.proxy = f"http://{proxy}" if proxy is not None else None
+        self.proxy = f"socks5://{proxy}" if proxy is not None else None
         self.thread = thread
         
         if proxy:
             parts = proxy.split(":")
             proxy = {
-                "scheme": "http",
+                "scheme": "socks5",
                 "hostname": parts[0] if len(parts) == 2 else parts[1].split('@')[1],
                 "port": int(parts[2]) if len(parts) == 3 else int(parts[1]),
                 "username": parts[0] if len(parts) == 3 else "",
