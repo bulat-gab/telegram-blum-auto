@@ -24,3 +24,5 @@ WORKDIR = "sessions/"
 
 
 ACCOUNT_PER_ONCE = 3
+
+SOLVE_TASKS = True 

@@ -46,7 +46,7 @@ class BlumBot:
         
         logger.debug(f"{self.client.name} | claim_task response: {resp_json}")
 
-        return resp_json.get('status') == "CLAIMED"
+        return resp_json.get('status') == "FINISHED"
 
     async def start_complete_task(self, task: dict):
         """
@@ -55,8 +55,11 @@ class BlumBot:
         resp = await self.session.post(f'https://game-domain.blum.codes/api/v1/tasks/{task["id"]}/start',
                                        proxy=self.proxy, ssl=False)
         resp_json = await resp.json()
-
         logger.debug(f"{self.client.name} | start_complete_task response: {resp_json}")
+
+        status = resp_json.get('status')
+
+        return status == "STARTED"
 
     async def get_tasks(self):
         """

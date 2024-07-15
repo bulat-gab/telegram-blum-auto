@@ -25,6 +25,57 @@ async def start(thread: int, account: str, proxy: [str, None]):
 
                 while True:
                     try:
+                        if config.SOLVE_TASKS:
+                            async def solve_task(t):
+                                task_status = t.get('status')
+                                if task_status == "READY_FOR_CLAIM":
+                                    task_claimed = await blum.claim_task(t)
+                                    if task_claimed:
+                                        logger.success(f"{account} | Claimed task id '{t['id']}' title: '{t['title']}'")
+                                    else:
+                                        logger.warning(f"{account} | Could not claim task. task id: {t['id']}; title: {t['title']}")
+
+
+                                elif task_status == "NOT_STARTED":
+                                    task_started = await blum.start_complete_task(t)
+                                    if task_started:
+                                        logger.info(f"{account} | Started task id '{t['id']}' title: '{t['title']}'")
+                                    else:
+                                        logger.warning(f"{account} | Could not start task. task id: {t['id']}; title: {t['title']}")
+
+                                elif task_status == "STARTED":
+                                    logger.info(f"{account} | Task started but cannot be claimed yet. task id: {t['id']}; title: {t['title']}")
+
+                                else:
+                                    logger.warning(f"{account} | Unknown task status: {task_status}. task id '{t['id']}' title: '{t['title']}'")
+                                
+                            try:
+                                tasks = await blum.get_tasks()
+                                tasks = [t for t in tasks if t.get('status') != "FINISHED" and t.get('status') != "ONGOING"]
+                                logger.info(f"{account} | Tasks available: {len(tasks)}")
+
+                                for t in tasks:
+                                    task_kind = t.get('kind')
+                                    if task_kind == "INITIAL":
+                                        await solve_task(t)
+                                    
+                                    elif task_kind == "QUEST":
+                                        sub_tasks = t.get('subTasks')
+                                        logger.info(f"{account} | Task '{t['id']}' contains {len(sub_tasks)} sub tasks")
+                                        for sub_task in sub_tasks:
+                                            await solve_task(sub_task)
+                                            await sleep(uniform(3, 10))
+                                    elif task_kind == "ONGOING":
+                                        # TODO: Handle Ongoing tasks (Example: Farming 10000 Blum points)
+                                        continue
+
+                                    await sleep(uniform(3, 10))
+
+
+                            except Exception as e:
+                                logger.error(f"{account} | Error during task claiming: {e}")
+      
+
                         msg = await blum.claim_daily_reward()
                         if isinstance(msg, bool) and msg:
                             logger.success(f"{account} | Claimed daily reward!")
