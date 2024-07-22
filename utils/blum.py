@@ -44,7 +44,7 @@ class BlumBot:
                                        proxy=self.proxy, ssl=False)
         resp_json = await resp.json()
         
-        logger.debug(f"{self.client.name} | claim_task response: {resp_json}")
+        logger.info(f"{self.client.name} | claim_task response: {resp_json}")
 
         return resp_json.get('status') == "FINISHED"
 
@@ -69,6 +69,7 @@ class BlumBot:
         resp_json = await resp.json()
 
         logger.debug(f"{self.client.name} | get_tasks response: {resp_json}")
+        logger.info(f"{self.client.name} | get_tasks response: {resp_json}")
 
         # Ensure the response is a list of tasks
         if isinstance(resp_json, list):

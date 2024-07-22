@@ -1,5 +1,6 @@
 from asyncio import sleep
 from random import uniform
+from typing import List, Optional
 
 import aiohttp
 from aiocfscrape import CloudflareScraper
@@ -9,9 +10,11 @@ from data import config
 from utils.blum import BlumBot
 from utils.core import logger
 from utils.helper import format_duration
+from utils.constants import task_statuses
+from utils.constants import task_kinds
 
 
-async def start(thread: int, account: str, proxy: [str, None]):
+async def start(thread: int, account: str, proxy: Optional[List[str]]):
     while True:
         async with CloudflareScraper(headers={'User-Agent': generate_random_user_agent(device_type='android',
                                                                                        browser_type='chrome')},
@@ -28,22 +31,25 @@ async def start(thread: int, account: str, proxy: [str, None]):
                         if config.SOLVE_TASKS:
                             async def solve_task(t):
                                 task_status = t.get('status')
-                                if task_status == "READY_FOR_CLAIM":
+                                if task_status == task_statuses.READY_FOR_CLAIM:
                                     task_claimed = await blum.claim_task(t)
                                     if task_claimed:
                                         logger.success(f"{account} | Claimed task id '{t['id']}' title: '{t['title']}'")
                                     else:
                                         logger.warning(f"{account} | Could not claim task. task id: {t['id']}; title: {t['title']}")
 
+                                if t.get('kind') == task_kinds.ONGOING:
+                                    logger.info(f"{account} | Skipping ongoing task {t['title']}. Not ready for claim")
 
-                                elif task_status == "NOT_STARTED":
+
+                                elif task_status == task_statuses.NOT_STARTED:
                                     task_started = await blum.start_complete_task(t)
                                     if task_started:
                                         logger.info(f"{account} | Started task id '{t['id']}' title: '{t['title']}'")
                                     else:
                                         logger.warning(f"{account} | Could not start task. task id: {t['id']}; title: {t['title']}")
 
-                                elif task_status == "STARTED":
+                                elif task_status == task_statuses.STARTED:
                                     logger.info(f"{account} | Task started but cannot be claimed yet. task id: {t['id']}; title: {t['title']}")
 
                                 else:
@@ -51,23 +57,32 @@ async def start(thread: int, account: str, proxy: [str, None]):
                                 
                             try:
                                 tasks = await blum.get_tasks()
-                                tasks = [t for t in tasks if t.get('status') != "FINISHED" and t.get('status') != "ONGOING"]
-                                logger.info(f"{account} | Tasks available: {len(tasks)}")
-
+                                filtered_tasks = []
                                 for t in tasks:
-                                    task_kind = t.get('kind')
-                                    if task_kind == "INITIAL":
+                                    kind = t.get('kind')
+                                    status = t.get('status')
+
+                                    if kind == task_kinds.ONGOING:
+                                        if status == task_statuses.READY_FOR_CLAIM:
+                                            filtered_tasks.append(t)
+                                    else:
+                                        if status != task_statuses.FINISHED:
+                                            filtered_tasks.append(t)
+
+
+                                logger.info(f"{account} | Tasks available: {len(filtered_tasks)}")
+
+                                for t in filtered_tasks:
+                                    kind = t.get('kind')
+                                    if kind == task_kinds.INITIAL or kind == task_kinds.ONGOING:
                                         await solve_task(t)
                                     
-                                    elif task_kind == "QUEST":
+                                    elif kind == task_kinds.QUEST:
                                         sub_tasks = t.get('subTasks')
                                         logger.info(f"{account} | Task '{t['id']}' contains {len(sub_tasks)} sub tasks")
                                         for sub_task in sub_tasks:
                                             await solve_task(sub_task)
                                             await sleep(uniform(3, 10))
-                                    elif task_kind == "ONGOING":
-                                        # TODO: Handle Ongoing tasks (Example: Farming 10000 Blum points)
-                                        continue
 
                                     await sleep(uniform(3, 10))
 
