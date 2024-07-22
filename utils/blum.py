@@ -69,7 +69,6 @@ class BlumBot:
         resp_json = await resp.json()
 
         logger.debug(f"{self.client.name} | get_tasks response: {resp_json}")
-        logger.info(f"{self.client.name} | get_tasks response: {resp_json}")
 
         # Ensure the response is a list of tasks
         if isinstance(resp_json, list):
